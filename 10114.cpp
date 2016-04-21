@@ -1,44 +1,43 @@
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <vector>
 
+#include<cstdio>
+ 
 using namespace std;
+ 
+int duration, months, a;
+float down, amount, b;
+float depr[110];
+ 
+void simul(int month, float car, float loan, float payment) {
+  loan -= payment;
+  car -= depr[month] * car;
 
-typedef vector<int> vi;
-typedef vector<float> vf;
+  if(loan < car) {
+    printf(month == 1? "1 month\n" : "%d months\n", month);
+    return;
+
+  }
+  simul(month + 1, car, loan, payment);
+
+}
 
 int main() {
-  int time, rec;
-  float princ, dp;
-  while(scanf("%d %f %f %d", &time, &dp, &princ, &rec) != EOF) {
-    vf rates;
-    for(int i=0; i<time; i++) {
-      rates.push_back(0);
+  for(;;) {
+    scanf("%d %f %f %d", &duration, &down, &amount, &months);
+    if(duration < 0) break;
+    for(int i = 0; i < 110; i++)
+      depr[i] = -1;
+    for(int i = 0; i < months; i++) {
+      scanf("%d %f", &a, &b);
+      depr[a] = b;
+
     }
-    int j = 0;
-    while(rec--) {
-      int i; float r;
-      scanf("%d %f", &i, &r);
-      for(j = i; j<=time; j++) {
-        rates[j] = r;
-      }
-    }
-    float amt = dp+princ;
-    int month = 1;
-    cout << "haha " << rates[0] << endl;
-    float val = amt*(1-rates[0]);
-    float owe = princ;
-    while(val <= owe) {
-      cout << "val " << val << " owe " << owe << endl;
-      val = val*(1-rates[month]);
-      owe = owe - dp*month;
-      month++;
-    }
-    if (month > 1)
-      cout << month << " months" << endl;
-    else
-      cout << "1 month" << endl;
+    for(int i = 0; i < 110; i++)
+      if(depr[i] < 0) depr[i] = depr[i - 1];
+
+    float car = (amount + down) * (1.0 - depr[0]);
+    if(amount < car) printf("0 months\n");
+    else simul(1, car, amount, amount / duration);
+
   }
-  return 0;
+
 }
