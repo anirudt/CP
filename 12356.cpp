@@ -1,54 +1,39 @@
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-
+/*
+ *  * Sai Cheemalapati
+ *   * UVA 12356: Army buddies
+ *    *
+ *     */
+ 
+#include<cstdio>
+ 
 using namespace std;
-
-typedef vector<int> vi;
-typedef vector<float> vf;
-typedef vector<string> vs;
-
-typedef map<int, int> mii;
-
+ 
+int S, B, L, R;
+int LS[1000100];
+int RS[1000100];
+ 
 int main() {
-  int S, B;
-  while(scanf("%d %d", &S, &B) != EOF && (S!=0 && B!=0)) {
-    vi alive;
-    /* Can use direct address */
-    for(int i=0; i<S+1; i++)
-      alive.push_back(1);
-    for(int i=0; i<B; i++) {
-      int L, R, flag1 = 0, flag2 = 0;
-      int left_bud, right_bud;
-      scanf("%d %d", &L, &R);
-      for(int j=L; j<=R; j++)
-        alive[j] = -1;
-      for(int k = L-1; k >= 1; k--) {
-        if (alive[k] != -1) {
-          left_bud = k;
-          flag1 = 1;
-          break;
-        }
-      }
-      for(int m = R+1; m <= S; m++) {
-        if (alive[m] != -1) {
-          right_bud = m;
-          flag2 = 1;
-          break;
-        }
-      }
-      if (flag1 == 0)
-        cout << "* ";
-      else
-        cout << left_bud << " ";
-      if (flag2 == 0)
-        cout << "*" << endl;
-      else
-        cout << right_bud << endl;
+  for(;;) {
+    scanf("%d %d", &S, &B);
+    if(S == 0 & B == 0) break;
+    for(int i = 0; i < S + 1; i++) {
+      LS[i] = i - 1;
+      RS[i] = i + 1;
+
     }
-    cout << "-" << endl;
+    for(int i = 0; i < B; i++) {
+      scanf("%d %d", &L, &R);
+      if(LS[L] < 1) printf("* ");
+      else printf("%d ", LS[L]);
+      if(RS[R] > S) printf("*\n");
+      else printf("%d\n", RS[R]);
+
+      LS[RS[R]] = LS[L];
+      RS[LS[L]] = RS[R];
+
+    }
+    printf("-\n");
+
   }
-  return 0;
+
 }
