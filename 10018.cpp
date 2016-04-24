@@ -10,6 +10,8 @@
 
 using namespace std;
 
+typedef long long ll;
+
 typedef vector<int> vi;
 typedef vector<float> vf;
 typedef vector<string> vs;
@@ -17,46 +19,53 @@ typedef vector<string> vs;
 typedef map<int, int> mii;
 
 /* Digit getter */
+vi get_digs(int n) {
+  vi dig;
+  while(n>0) {
+    dig.push_back(n%10);
+    n /= 10;
+  }
+  return dig;
+}
 
 /* Palindrome checker */
+int pal(ll a) {
+  vi dig_a, dig_b;
+  dig_a = get_digs(a);
+  int len = dig_a.size();
+  int flag = 0;
+  for (int i=0; i<len; i++) {
+    if (dig_a[i] != dig_a[len-1-i]) {
+      flag = 1; break;
+    }
+  }
+  return(flag == 0?1:-1);
+}
 
 int main() {
   int N; cin >> N;
   while(N--) {
-    int num, k; cin >> num;
+    long long num, k; cin >> num;
     int iter = 0;
     while (num < NUM_MAX && iter <= 100) {
       vi dig; k = num;
-      while(k>0) {
-        dig.push_back(k%10);
-        k = k/10;
-      }
-      int new_num = 0, len = dig.size();
+      ll rev_num = 0;
       vi new_dig;
+      dig = get_digs(num);
+      ll pdt = 1;
+      int len = dig.size();
       for(int i=0; i<len; i++) {
         // Update sum.
-        new_dig.push_back(dig[i]+dig[len-1-i]);
-        new_num += new_dig[i]*pow(10, i);
+        rev_num += dig[len-1-i]*pdt;
+        pdt *= 10;
       }
-      int new_len = new_dig.size();
-      int flag = 0;
-      for (int j=0; j<new_len; j++) {
-        cout << new_dig[j] << " " << new_dig[new_len-1-j];
-        if (new_dig[j] != new_dig[new_len-1-j]) {
-          flag = 1;
-          break;
-        }
-        else
-          continue;
-      }
-      if (flag == 1) {
-        num = new_num;
-        iter++;
-      }
-      else {
-        cout << iter << " " << new_num << endl;
+      if (pal(num) > 0) {
+        cout << iter << " " << num << endl;
         break;
       }
+      else
+        num = num + rev_num;
+      iter++;
     }
   }
   return 0;
