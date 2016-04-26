@@ -1,42 +1,45 @@
-#include <cstdio>
-#include <iostream>
 #include <string>
 #include <vector>
-#include <map>
-#include <algorithm>
-#include <stack>
+#include <iostream>
 
 using namespace std;
 
-typedef long long ll;
-
-typedef vector<int> vi;
-typedef vector<float> vf;
-typedef vector<string> vs;
-typedef vector<vi> vi2d;
-typedef vector<ll> vll;
-
-typedef map<int, int> mii;
-
-// Glob Var Defs
-
-int main() {
+int main()
+{
   int N;
-  while (cin >> N && N!=0) {
-    string str;
-    vi L, R; int l, r;
-    for(int i=0; i<N; i++) {
-      getline(cin, str);
-      int j = 0;
-      while (str[j]=='X' && str[j+1]=='B')
-        j++;
-      cout << j << endl;
-      L.push_back(j);
-      while (str[j]=='B' && str[j+1]=='X')
-        j++;
-      cout << j << endl;
-      R.push_back(j);
+
+  while (cin >> N, N)
+  {
+    cin.ignore();
+
+    vector<int> spaces(N);
+    int minSpaces = -1;
+
+    string line;
+
+    for (int i = 0; i < N; ++i)
+    {
+      getline(cin, line);
+      int spaceCount = 0;
+      for (string::const_iterator iter = line.begin(); iter != line.end(); ++iter)
+      {
+        if (*iter != 'X')
+          ++spaceCount;
+
+      }
+
+      spaces[i] = spaceCount;
+      if (spaceCount < minSpaces || minSpaces == -1)
+        minSpaces = spaceCount;
+
     }
+
+    int total = 0;
+    for (int i = 0; i < N; ++i)
+      total += spaces[i] - minSpaces;
+
+    cout << total << '\n';
+
   }
-  return 0;
+
 }
