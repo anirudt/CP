@@ -14,8 +14,11 @@ typedef vector<int> vi;
 typedef vector<float> vf;
 typedef vector<string> vs;
 typedef vector<vi> vi2d;
+typedef vector<ll> vll;
 
 typedef map<int, int> mii;
+
+// Glob Var Defs
 
 int main() {
 
