@@ -1,88 +1,94 @@
+#include<iostream>
+#include<vector>
+#include<set>
 #include <cstdio>
-#include <cctype>
-#include <queue>
-#include <sstream>
-#include <cmath>
-#include <climits>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <stack>
 
 using namespace std;
 
-typedef long long ll;
+struct nodo{
+  int num,orden,pos;
 
-typedef vector<int> vi;
-typedef vector<float> vf;
-typedef vector<string> vs;
-typedef vector<vi> vi2d;
-typedef vector<ll> vll;
-typedef pair<int, int> ii;
+  nodo(int a, int b, int c){
+    num=a;
+    orden=b;
+    pos=c;
 
-typedef map<int, int> mii;
-
-// Glob Var Defs
-
-int main() {
-  int t, iter = 1;
-  while(cin >> t, t) {
-    cout << "Scenario #" << iter << endl;
-    mii dict, updated;
-    for (int i=0; i<t; i++) {
-      updated[i] = -1;
-      int n; cin >> n;
-      for (int j=0; j<n; j++) {
-        int p; cin >> p;
-        dict[p] = i+1;
-      }
-    }
-    // Command enlisting
-    string str;
-    vector<ii> q;
-    while(getline(cin, str) && str != "STOP") {
-      istringstream iss(str);
-      if (str.find("ENQUEUE") != string::npos) {
-        string s; int key;
-        iss >> s; iss >> key;
-        ii tmp; tmp.first = dict[key];
-        tmp.second = key;
-        
-        if (q.size()==0) {
-          q.push_back(tmp);
-          updated[tmp.first] = 0;
-        }
-        else {
-          bool found = false; int idx = 0;
-          //cout << "Last idx " << q.size()-1 << endl;
-          if (updated[tmp.first] != -1 && tmp.first != q[q.size()-1].first) {
-            /* Cached, and present */
-            idx = updated[tmp.first]+1;
-            updated[tmp.first] += 1;
-            q.insert(q.begin()+idx, tmp);
-          }
-          else {
-            //cout << "Hello " << endl;
-            q.push_back(tmp);
-            updated[tmp.first] = q.size()-1;
-          }
-        }
-      //cout << tmp.first << " updated " << updated[tmp.first] << endl;
-
-      }
-      else if (str.find("DEQUEUE") != string::npos) {
-        int key = q[0].second;
-        q.erase(remove(q.begin(), q.end(), q[0]), q.end());
-        //cout << "Pop" << endl;
-        cout << key << endl;
-      }
-      //for (int i=0; i<q.size(); i++)
-        //cout << q[i].second << endl;
-    }
-    cout << endl;
-    iter++;
   }
+
+  bool operator < (nodo X)const{
+    if(orden!=X.orden) return orden<X.orden;
+    return pos<X.pos;
+
+  }
+
+};
+
+int main(){
+  set<nodo> team_queue;
+  int t,n,a,cont,caso=1;
+  string command;
+
+  vector<int> N(1000000);
+  int cont_team[1000];
+  int team[1000];
+  int pos[1000];
+
+  set<nodo> :: iterator it;
+
+  while(cin>>t){
+    if(t==0) break;
+
+    cout<<"Scenario #"<<caso<<endl;
+    caso++;
+
+    for(int i=0;i<t;i++){
+      scanf("%d",&n);
+      for(int j=0;j<n;j++){
+        cin>>a;
+        N[a]=i;
+
+      }
+
+    }
+
+    fill(team,team+t,0);
+    fill(cont_team,cont_team+t,0);
+
+    cont=0;
+
+    team_queue.clear();
+
+    while(cin>>command){
+      if(command[0]=='S') break;
+      else if(command[0]=='D'){
+        it=team_queue.begin();
+        printf("%d\n",(*it).num);
+        cont_team[N[(*it).num]]--;
+        team_queue.erase(*it);                
+
+      }else{
+        scanf("%d",&a);
+        if(cont_team[N[a]]==0){
+          cont_team[N[a]]=1;
+          team[N[a]]++;
+          team_queue.insert(nodo(a,cont,1));
+          pos[N[a]]=cont;
+          cont++;
+
+        }else{
+          cont_team[N[a]]++;
+          team[N[a]]++;
+          team_queue.insert(nodo(a,pos[N[a]],team[N[a]]));
+
+        }
+
+      }
+
+    }
+    cout<<endl;
+
+  }
+
   return 0;
+
 }
