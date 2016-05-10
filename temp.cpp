@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <cctype>
+#include <queue>
 #include <sstream>
 #include <cmath>
 #include <climits>
