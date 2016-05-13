@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <functional>
 #include <cctype>
 #include <queue>
 #include <sstream>
