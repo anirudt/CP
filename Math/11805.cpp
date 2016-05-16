@@ -28,5 +28,15 @@ typedef map<int, int> mii;
 // Glob Var Defs
 
 int main() {
+  int t; scanf("%d", &t);
+  int N, K, P; int iter = 1;
+  while(scanf("%d %d %d", &N, &K, &P) != EOF) {
+    if ((K+P)%N == 0) printf("Case %d: %d\n", iter, N);
+    else {
+      int ans = (K+P)%N;
+      printf("Case %d: %d\n", iter, ans);
+    }
+    iter++;
+  }
   return 0;
 }
