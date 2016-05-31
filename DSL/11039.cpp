@@ -53,5 +53,44 @@ typedef map<int, int> mii;
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
+  int t;
+  cin >> t;
+  while(t--) {
+    int F; cin >> F;
+    vi r, b;
+    for (int i=0; i<F; i++) {
+      int p; cin >> p;
+      if (p<0) r.pb(-p);
+      else b.pb(p);
+    }
+    sort(r.begin(), r.end(), greater<int>());
+    sort(b.begin(), b.end(), greater<int>());
+    int i = 0, j = 0;
+    bool toggle = true;
+    toggle = r[0]>b[0] ? true : false;
+    if (toggle) i = 1;
+    else j = 1;
+    int c = 1;
+    while (i<r.size() && j<b.size()) {
+      if (toggle) {
+        if (r[i] < b[j]) {
+          toggle = false;
+          c++;
+
+        }
+        else i++;
+      }
+      else {
+        if (r[i]>b[j]) {
+          toggle = true;
+          c++;
+        }
+        else j++;
+      }
+    }
+    if (i==r.size() && b[j] < r[i-1] || j==b.size() && r[i] < b[j-1]) c++;
+    cout << c << endl;
+  }
+
   return 0;
 }
